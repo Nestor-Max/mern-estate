@@ -1,13 +1,14 @@
 const asyncHandler = require('express-async-handler');
+
 //@desc GET user
-//@route GET /api/user
+//@route GET /api/auth
 //@access Public
-const getUser = asyncHandler(async (req, res) => {
+const signup = asyncHandler(async (req, res) => {
 	res.status(200).json({
-		message: 'Get User',
+		message: 'Sign Up',
 	});
 });
 
 module.exports = {
-	getUser,
+	signup,
 };
