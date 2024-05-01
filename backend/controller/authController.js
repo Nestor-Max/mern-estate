@@ -7,6 +7,9 @@ const bcrypt = require('bcryptjs');
 //@access Public
 const signup = asyncHandler(async (req, res) => {
 	const { username, email, password } = req.body;
+	if (!req.body.text) {
+		throw new Error('Enter all required information');
+	}
 
 	// const newUser =  new User({
 	// 	username,email,password
