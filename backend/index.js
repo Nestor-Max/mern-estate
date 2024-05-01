@@ -12,11 +12,12 @@ app.use(
 		extended: false,
 	})
 );
+
 connectDB();
-app.use(errorHandler);
+
 app.use('/api/user', require('./routes/userRoute'));
 app.use('/api/auth', require('./routes/authRoute'));
-
+app.use(errorHandler);
 app.listen(port, () => {
 	console.log(`Server started on port ${port}`);
 });
