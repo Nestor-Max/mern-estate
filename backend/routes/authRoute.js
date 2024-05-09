@@ -1,7 +1,16 @@
 const express = require('express');
-const { signup } = require('../controller/authController');
+const { signup, getMe } = require('../controller/authController');
 const router = express.Router();
+const cors = require('cors');
 
-router.route('/signup').get(signup);
+router.use(
+	cors({
+		origin: 'http://localhost:5173/',
+		credentials: true,
+	})
+);
+
+router.route('/signup').post(signup);
+router.route('/').post(getMe);
 
 module.exports = router;

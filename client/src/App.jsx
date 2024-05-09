@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import About from './pages/About';
@@ -5,6 +6,9 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+
+axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.withCredentials = true;
 function App() {
 	return (
 		<BrowserRouter>
