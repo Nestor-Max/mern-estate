@@ -5,35 +5,29 @@ const bcrypt = require('bcryptjs');
 //@desc GET user
 //@route GET /api/auth
 //@access Public
-const signup = asyncHandler(async (req, res) => {
-	//const { username, email, password } = req.body;
-	// if (!req.body.text) {
-	// 	throw new Error('Enter all required information');
-	// }
-	// const newUser =  new User({
-	// 	username,email,password
-	// })
-	// await newUser.save();
+const signup = asyncHandler(async (req, res, next) => {
+	const { username, email, password } = req.body;
+	if (!username || !email || !password) {
+		throw new Error('Information incomplete');
+	}
 
-	// const salt = await bcrypt.genSalt(10);
-	// const hashedPassword = await bcrypt.hash(password, salt);
-	// const user = await User.create({
-	// 	username,
-	// 	email,
-	// 	password: hashedPassword,
-	// });
+	const salt = await bcrypt.genSalt(10);
+	const hashedPassword = await bcrypt.hash(password, salt);
+	const user = new User({
+		username,
+		email,
+		password: hashedPassword,
+	});
 
-	// if (!user) {
-	// 	throw new Error('User already exists');
-	// }
+	await user.save();
 
-	// res.status(200).json({
-	// 	username: user.username,
-	// 	email: user.email,
-	// });
+	if (!user) {
+		throw new Error('User already exists');
+	}
 
 	res.status(200).json({
-		message: 'User Connected Successfully',
+		username: user.username,
+		email: user.email,
 	});
 });
 

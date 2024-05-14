@@ -13,6 +13,7 @@ app.use(
 		extended: false,
 	})
 );
+app.use(cors());
 
 connectDB();
 

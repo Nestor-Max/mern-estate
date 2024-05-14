@@ -1,14 +1,12 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
-	const [formData, setFormData] = useState({
-		username: '',
-		email: '',
-		password: '',
-	});
+	const [formData, setFormData] = useState({});
+	const [error, setError] = useState(null);
+	const [loading, setLoading] = useState(false);
 
 	const handleChange = (e) => {
 		setFormData({
@@ -16,44 +14,38 @@ export default function SignUp() {
 			[e.target.id]: e.target.value,
 		});
 	};
-	console.log(formData);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		const { username, email, password } = formData;
-		// const res = await axios.post('/api/auth/signup', {
-		// 	username,
-		// 	email,
-		// 	password,
-		// });
-		// const res = await fetch('/api/auth/signup', {
-		// 	method: 'POST',
-		// 	headers: {
-		// 		'Content-Type': 'application/json',
-		// 	},
-		// 	body: JSON.stringify(formData),
-		// });
-		// const data = await res.json();
-		// console.log(data);
-
-		// // axios.post('', { username, email, password });
+		setLoading(true);
 
 		try {
-			const { formData } = await axios.post('/api/auth/signup', {
-				username,
-				email,
-				password,
+			const res = await fetch('/api/auth/signup', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(formData),
 			});
-			if (formData.error) {
-				toast.error(formData);
-			} else {
-				setFormData({});
-				toast.success('Login Successful. Welcome');
+
+			const data = await res.json();
+			console.log(data);
+			if (data.success === false) {
+				setLoading(false);
+				setError(data.message);
+
+				return;
 			}
+
+			setLoading(false);
+			setError(null);
 		} catch (error) {
-			console.log(error);
+			setLoading(false);
+			setError(error.message);
 		}
 	};
+
+	//console.log(formData);
 	return (
 		<div className="p-3 max-w-lg mx-auto">
 			<h1 className="text-3xl text-center font-semibold my-7 text-slate-700">
@@ -66,7 +58,6 @@ export default function SignUp() {
 					className="border p-3 rounded-lg "
 					id="username"
 					name="username"
-					value={formData.username}
 					onChange={handleChange}
 				/>
 				<input
@@ -75,7 +66,6 @@ export default function SignUp() {
 					className="border p-3 rounded-lg"
 					id="email"
 					name="username"
-					value={formData.email}
 					onChange={handleChange}
 				/>
 				<input
@@ -84,12 +74,14 @@ export default function SignUp() {
 					className="border p-3 rounded-lg "
 					id="password"
 					name="username"
-					value={formData.password}
 					onChange={handleChange}
 				/>
 
-				<button className="bg-yellow-600 text-white p-3 rounded-lg uppercase hover:opacity-85 disabled:opacity-70">
-					Sign In
+				<button
+					disabled={loading}
+					className="bg-yellow-600 text-white p-3 rounded-lg uppercase hover:opacity-85 disabled:opacity-70"
+				>
+					{loading ? 'Loading...' : 'Sign Up'}
 				</button>
 			</form>
 			<div className="flex gap-2 mt-3">
@@ -98,6 +90,7 @@ export default function SignUp() {
 					<span className="text-slate-700">Sign In</span>
 				</Link>
 			</div>
+			{error && <p className="text-red-500 mt-5">{error}</p>}
 		</div>
 	);
 }
