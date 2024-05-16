@@ -19,7 +19,7 @@ export default function SignIn() {
 		setLoading(true);
 
 		try {
-			const res = await fetch('/api/auth/signup', {
+			const res = await fetch('/api/auth/signin', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -52,10 +52,10 @@ export default function SignIn() {
 			<form onSubmit={handleSubmit} className=" flex flex-col gap-4">
 				<input
 					type="email"
-					placeholder="Username or Email"
+					placeholder="Email"
 					className="border p-3 rounded-lg"
 					id="email"
-					name="username"
+					name="email"
 					onChange={handleChange}
 				/>
 				<input
@@ -63,7 +63,7 @@ export default function SignIn() {
 					placeholder="Password"
 					className="border p-3 rounded-lg "
 					id="password"
-					name="username"
+					name="password"
 					onChange={handleChange}
 				/>
 

@@ -52,9 +52,9 @@ const signin = asyncHandler(async (req, res) => {
 	res.cookie('access_token', token, { httpOnly: true }).status(200).json(rest);
 });
 
-const generateToken = (id) => {
-	return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
-};
+// const generateToken = (id) => {
+// 	return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+// };
 
 module.exports = {
 	signup,
