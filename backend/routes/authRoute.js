@@ -1,5 +1,5 @@
 const express = require('express');
-const { signup, getMe } = require('../controller/authController');
+const { signup, signin } = require('../controller/authController');
 const router = express.Router();
 const cors = require('cors');
 
@@ -11,6 +11,6 @@ router.use(
 );
 
 router.route('/signup').post(signup);
-router.route('/').post(getMe);
+router.route('/signin').post(signin);
 
 module.exports = router;
