@@ -52,6 +52,42 @@ const signin = asyncHandler(async (req, res) => {
 	res.cookie('access_token', token, { httpOnly: true }).status(200).json(rest);
 });
 
+const google = asyncHandler(async (req, res) => {
+	const user = await User.findOne({ email: req.body.email });
+
+	if (user) {
+		const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+		const { password: pass, ...rest } = user._doc;
+		res
+			.cookie('access_token', token, { httpOnly: true })
+			.status(200)
+			.json(rest);
+	} else {
+		const generatedPassword = generateSecurePassword();
+
+		const hashedPassword = bcrypt.hashSync(generatedPassword, 10);
+		const newUser = new User({
+			username: generateUsername(),
+			email: req.body.email,
+			password: hashedPassword,
+			avatar: req.body.photo,
+		});
+
+		function generateSecurePassword() {
+			Math.random().toString(36).slice(-8) +
+				Math.random().toString(36).slice(-8);
+		}
+		function generateUsername() {
+			req.body.name.split(' ').join('').toLowerCase() +
+				Math.random().toString(36).slice(-4);
+		}
+		await newUser.save();
+		const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
+		const { password: pass, ...rest } = newUser._doc;
+		res.cookie('access');
+	}
+});
+
 // const generateToken = (id) => {
 // 	return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 // };
@@ -59,4 +95,5 @@ const signin = asyncHandler(async (req, res) => {
 module.exports = {
 	signup,
 	signin,
+	google,
 };
